@@ -52,6 +52,7 @@ class TelaLogin extends StatelessWidget {
                         height: 18.0,
                       ),
                       TextField(
+                        obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(7.0),
