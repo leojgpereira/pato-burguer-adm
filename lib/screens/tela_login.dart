@@ -12,6 +12,8 @@ class _TelaLoginState extends State<TelaLogin> {
   TextEditingController _usuario = TextEditingController();
   TextEditingController _senha = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,87 +34,104 @@ class _TelaLoginState extends State<TelaLogin> {
               ),
               child: Stack(
                 children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 55.0,
-                      ),
-                      Text(
-                        'Login',
-                        style: TextStyle(
-                          color: Color(0xFF434343),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w700,
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 55.0,
                         ),
-                      ),
-                      SizedBox(
-                        height: 22.0,
-                      ),
-                      TextFormField(
-                        controller: _usuario,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(7.0),
-                          ),
-                          hintText: 'Usuário',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 18.0,
-                      ),
-                      TextFormField(
-                        controller: _senha,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(7.0),
-                          ),
-                          hintText: 'Senha',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16.0,
-                      ),
-                      GestureDetector(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            'Esqueceu a senha?',
-                            style: TextStyle(
-                              color: Color(0xFF434343),
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                        onTap: () {},
-                      ),
-                      SizedBox(
-                        height: 16.0,
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          await _signIn(context);
-                        },
-                        child: Text(
-                          'Entrar',
+                        Text(
+                          'Login',
                           style: TextStyle(
-                            fontSize: 20.0,
+                            color: Color(0xFF434343),
+                            fontSize: 18.0,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          primary: Color(0xFFFF9B0D),
-                          minimumSize: Size(double.infinity, 55.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                        SizedBox(
+                          height: 22.0,
+                        ),
+                        TextFormField(
+                          controller: _usuario,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Insira um usuário';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(7.0),
+                            ),
+                            hintText: 'Usuário',
                           ),
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          height: 18.0,
+                        ),
+                        TextFormField(
+                          controller: _senha,
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Insira uma senha';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(7.0),
+                            ),
+                            hintText: 'Senha',
+                          ),
+                        ),
+                        SizedBox(
+                          height: 16.0,
+                        ),
+                        GestureDetector(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'Esqueceu a senha?',
+                              style: TextStyle(
+                                color: Color(0xFF434343),
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          onTap: () {},
+                        ),
+                        SizedBox(
+                          height: 16.0,
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              await _signIn(context);
+                            }
+                          },
+                          child: Text(
+                            'Entrar',
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            primary: Color(0xFFFF9B0D),
+                            minimumSize: Size(double.infinity, 55.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   FractionalTranslation(
                     translation: Offset(-0.05, -0.61),
