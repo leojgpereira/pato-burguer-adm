@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:patoburguer_admin/models/auth_exception.dart';
+import 'package:patoburguer_admin/services/auth_service.dart';
+import 'package:provider/src/provider.dart';
 
-class TelaLogin extends StatelessWidget {
+class TelaLogin extends StatefulWidget {
+  @override
+  State<TelaLogin> createState() => _TelaLoginState();
+}
+
+class _TelaLoginState extends State<TelaLogin> {
+  TextEditingController _usuario = TextEditingController();
+  TextEditingController _senha = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +51,8 @@ class TelaLogin extends StatelessWidget {
                       SizedBox(
                         height: 22.0,
                       ),
-                      TextField(
+                      TextFormField(
+                        controller: _usuario,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(7.0),
@@ -51,7 +63,8 @@ class TelaLogin extends StatelessWidget {
                       SizedBox(
                         height: 18.0,
                       ),
-                      TextField(
+                      TextFormField(
+                        controller: _senha,
                         obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -80,7 +93,9 @@ class TelaLogin extends StatelessWidget {
                         height: 16.0,
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await _signIn(context);
+                        },
                         child: Text(
                           'Entrar',
                           style: TextStyle(
@@ -110,5 +125,23 @@ class TelaLogin extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _signIn(BuildContext context) async {
+    AuthService auth = context.read<AuthService>();
+
+    try {
+      await auth.signIn(_usuario.text, _senha.text);
+    } on AuthException catch (e) {
+      final loginFeedback = SnackBar(
+        content: Text(
+          e.message,
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 5),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(loginFeedback);
+    }
   }
 }
