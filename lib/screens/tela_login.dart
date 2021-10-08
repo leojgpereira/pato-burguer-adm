@@ -3,16 +3,8 @@ import 'package:patoburguer_admin/models/auth_exception.dart';
 import 'package:patoburguer_admin/services/auth_service.dart';
 import 'package:provider/src/provider.dart';
 
-class TelaLogin extends StatefulWidget {
-  @override
-  State<TelaLogin> createState() => _TelaLoginState();
-}
-
-class _TelaLoginState extends State<TelaLogin> {
-  TextEditingController _usuario = TextEditingController();
-  TextEditingController _senha = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
+class TelaLogin extends StatelessWidget {
+  const TelaLogin({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,105 +26,7 @@ class _TelaLoginState extends State<TelaLogin> {
               ),
               child: Stack(
                 children: [
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 55.0,
-                        ),
-                        Text(
-                          'Login',
-                          style: TextStyle(
-                            color: Color(0xFF434343),
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 22.0,
-                        ),
-                        TextFormField(
-                          controller: _usuario,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Insira um usuário';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(7.0),
-                            ),
-                            hintText: 'Usuário',
-                          ),
-                        ),
-                        SizedBox(
-                          height: 18.0,
-                        ),
-                        TextFormField(
-                          controller: _senha,
-                          obscureText: true,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Insira uma senha';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(7.0),
-                            ),
-                            hintText: 'Senha',
-                          ),
-                        ),
-                        SizedBox(
-                          height: 16.0,
-                        ),
-                        GestureDetector(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              'Esqueceu a senha?',
-                              style: TextStyle(
-                                color: Color(0xFF434343),
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                          onTap: () {},
-                        ),
-                        SizedBox(
-                          height: 16.0,
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              await _signIn(context);
-                            }
-                          },
-                          child: Text(
-                            'Entrar',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            primary: Color(0xFFFF9B0D),
-                            minimumSize: Size(double.infinity, 55.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  FormularioLogin(),
                   FractionalTranslation(
                     translation: Offset(-0.05, -0.61),
                     child: Image.asset('assets/images/logo_pato_burguer.png'),
@@ -142,6 +36,125 @@ class _TelaLoginState extends State<TelaLogin> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class FormularioLogin extends StatefulWidget {
+  const FormularioLogin({Key? key}) : super(key: key);
+
+  @override
+  _FormularioLoginState createState() => _FormularioLoginState();
+}
+
+class _FormularioLoginState extends State<FormularioLogin> {
+  final TextEditingController _usuario = TextEditingController();
+  final TextEditingController _senha = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  Color corTexto = const Color(0xFF434343);
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 55.0,
+          ),
+          Text(
+            'Login',
+            style: TextStyle(
+              color: corTexto,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          SizedBox(
+            height: 22.0,
+          ),
+          TextFormField(
+            controller: _usuario,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Insira um usuário';
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(7.0),
+              ),
+              hintText: 'Usuário',
+            ),
+          ),
+          SizedBox(
+            height: 18.0,
+          ),
+          TextFormField(
+            controller: _senha,
+            obscureText: true,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Insira uma senha';
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(7.0),
+              ),
+              hintText: 'Senha',
+            ),
+          ),
+          SizedBox(
+            height: 16.0,
+          ),
+          GestureDetector(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                'Esqueceu a senha?',
+                style: TextStyle(
+                  color: corTexto,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+            onTap: () {},
+          ),
+          SizedBox(
+            height: 16.0,
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                await _signIn(context);
+              }
+            },
+            child: Text(
+              'Entrar',
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              primary: Theme.of(context).primaryColor,
+              minimumSize: Size(double.infinity, 55.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
