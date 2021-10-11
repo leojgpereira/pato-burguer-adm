@@ -44,4 +44,41 @@ class AuthService extends ChangeNotifier {
       throw AuthException('Erro. Tente novamente mais tarde!');
     }
   }
+
+  Future _checkPassword(User user, String senhaAtual) async {
+    AuthCredential credentials = EmailAuthProvider.credential(
+      email: user.email!,
+      password: senhaAtual,
+    );
+
+    try {
+      await user.reauthenticateWithCredential(credentials);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        throw AuthException("Senha atual incorreta!");
+      } else {
+        throw AuthException("Erro! Tente novamente mais tarde.");
+      }
+    }
+  }
+
+  Future updatePassword(String senhaAtual, novaSenha) async {
+    User? user = await _auth.currentUser;
+
+    if (user != null) {
+      final checaSenha = await _checkPassword(user, senhaAtual);
+
+      if (checaSenha == null) {
+        try {
+          await user.updatePassword(novaSenha);
+        } on FirebaseAuthException catch (e) {
+          throw AuthException("Erro! Tente novamente mais tarde.");
+        }
+      } else {
+        return checaSenha;
+      }
+    } else {
+      throw AuthException('Usuário não identificado!');
+    }
+  }
 }

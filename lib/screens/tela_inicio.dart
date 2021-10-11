@@ -62,7 +62,9 @@ class TelaInicio extends StatelessWidget {
                 Botao(
                   texto: 'Alterar Senha',
                   icone: 'assets/images/icons/alterar_senha.png',
-                  callback: () {},
+                  callback: () {
+                    Navigator.pushNamed(context, '/alterar-senha');
+                  },
                 ),
               ],
             ),

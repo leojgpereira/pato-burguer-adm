@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:patoburguer_admin/screens/tela_altera_senha.dart';
 import 'components/auth_check.dart';
 
 class PatoBurguerAdminApp extends StatelessWidget {
@@ -14,6 +14,7 @@ class PatoBurguerAdminApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => AuthCheck(),
+        '/alterar-senha': (context) => TelaAlteraSenha(),
       },
     );
   }
