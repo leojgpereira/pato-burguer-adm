@@ -230,7 +230,28 @@ class FormularioAlteracaoProduto extends StatelessWidget {
   }
 
   Future<void> _atualizaProduto(BuildContext context) async {
-    print("Atualizar");
+    late String feedbackMessage;
+
+    await produtos.doc(produto.documentId).update({
+      'nome': _nomeProduto!.text,
+      'detalhes': _detalhesProduto!.text,
+      'ingredientes': _ingredientesProduto!.text,
+      'preco': double.tryParse(_precoProduto!.text),
+    }).then((value) {
+      feedbackMessage = "Produto atualizado com sucesso!";
+    }).catchError((error) {
+      feedbackMessage = "Erro ao atualizar produto!";
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          feedbackMessage,
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 5),
+      ),
+    );
   }
 }
 
