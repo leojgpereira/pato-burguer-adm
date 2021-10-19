@@ -46,7 +46,13 @@ class TelaInicio extends StatelessWidget {
                 Botao(
                   texto: 'Alterar Cardápio',
                   icone: 'assets/images/icons/alterar_cardapio.png',
-                  callback: () {},
+                  callback: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/alterar-item',
+                      arguments: '8nldwus93kmoIVmP23EX',
+                    );
+                  },
                 ),
                 SizedBox(
                   height: 30.0,
