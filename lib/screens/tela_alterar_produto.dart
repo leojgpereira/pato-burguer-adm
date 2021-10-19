@@ -5,16 +5,23 @@ import 'package:patoburguer_admin/models/produto.dart';
 
 Color corTexto = const Color(0xFF434343);
 
-class TelaAlterarProduto extends StatelessWidget {
-  const TelaAlterarProduto({Key? key}) : super(key: key);
+class TelaAlterarProduto extends StatefulWidget {
+  TelaAlterarProduto({Key? key}) : super(key: key);
+
+  @override
+  State<TelaAlterarProduto> createState() => _TelaAlterarProdutoState();
+}
+
+class _TelaAlterarProdutoState extends State<TelaAlterarProduto> {
+  CollectionReference produtos =
+      FirebaseFirestore.instance.collection('produtos');
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference produtos =
-        FirebaseFirestore.instance.collection('produtos');
-
     final String documentId =
         ModalRoute.of(context)!.settings.arguments! as String;
+
+    bool showDeleteAction = true;
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -29,6 +36,23 @@ class TelaAlterarProduto extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Theme.of(context).primaryColor,
+        actions: [
+          Visibility(
+            visible: showDeleteAction,
+            child: IconButton(
+              onPressed: () async {
+                await _deletaProduto(context, documentId);
+              },
+              icon: SizedBox(
+                child: Image.asset(
+                  'assets/images/icons/delete.png',
+                  width: 23.0,
+                  height: 23.0,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: produtos.doc(documentId).get(),
@@ -143,6 +167,36 @@ class TelaAlterarProduto extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Future<void> _deletaProduto(BuildContext context, String documentId) async {
+    late String feedbackMessage;
+
+    await produtos.doc(documentId).get().then(
+      (DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          produtos.doc(documentId).delete().then((value) {
+            feedbackMessage = "Produto deletado com sucesso!";
+
+            Navigator.of(context).pop();
+          }).catchError((error) {
+            feedbackMessage = "Erro ao deletar produto!";
+          });
+        } else {
+          feedbackMessage = "Erro! Produto não encontrado.";
+        }
+      },
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          feedbackMessage,
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 5),
       ),
     );
   }

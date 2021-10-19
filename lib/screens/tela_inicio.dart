@@ -50,7 +50,7 @@ class TelaInicio extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       '/alterar-item',
-                      arguments: '8nldwus93kmoIVmP23EX',
+                      arguments: 'L71r9ujjiSaQ8o7pzA0Q',
                     );
                   },
                 ),
