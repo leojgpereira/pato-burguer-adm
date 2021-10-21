@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:patoburguer_admin/components/confirma_exclusao.dart';
 import 'package:patoburguer_admin/models/produto.dart';
 
 Color corTexto = const Color(0xFF434343);
@@ -21,8 +22,6 @@ class _TelaAlterarProdutoState extends State<TelaAlterarProduto> {
     final String documentId =
         ModalRoute.of(context)!.settings.arguments! as String;
 
-    bool showDeleteAction = true;
-
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       // resizeToAvoidBottomInset: false,
@@ -37,20 +36,26 @@ class _TelaAlterarProdutoState extends State<TelaAlterarProduto> {
         elevation: 0,
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
-          Visibility(
-            visible: showDeleteAction,
-            child: IconButton(
-              onPressed: () async {
-                await _deletaProduto(context, documentId);
-              },
-              icon: SizedBox(
-                child: Image.asset(
-                  'assets/images/icons/delete.png',
-                  width: 23.0,
-                  height: 23.0,
-                ),
-              ),
-            ),
+          FutureBuilder(
+            future: produtos.doc(documentId).get(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.data.exists &&
+                  snapshot.connectionState == ConnectionState.done) {
+                return IconButton(
+                  onPressed: () async {
+                    await mostraAlertaExclusao(context, documentId);
+                  },
+                  icon: Image.asset(
+                    'assets/images/icons/delete.png',
+                    width: 23.0,
+                    height: 23.0,
+                  ),
+                );
+              }
+
+              return Container();
+            },
           ),
         ],
       ),
@@ -171,24 +176,43 @@ class _TelaAlterarProdutoState extends State<TelaAlterarProduto> {
     );
   }
 
-  Future<void> _deletaProduto(BuildContext context, String documentId) async {
-    late String feedbackMessage;
-
-    await produtos.doc(documentId).get().then(
-      (DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.exists) {
-          produtos.doc(documentId).delete().then((value) {
-            feedbackMessage = "Produto deletado com sucesso!";
-
-            Navigator.of(context).pop();
-          }).catchError((error) {
-            feedbackMessage = "Erro ao deletar produto!";
-          });
-        } else {
-          feedbackMessage = "Erro! Produto não encontrado.";
-        }
+  Future<void> mostraAlertaExclusao(
+      BuildContext context, String documentId) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmaExclusao(
+          callback: () async {
+            await _deletaProduto(context, documentId);
+          },
+        );
       },
     );
+  }
+
+  Future<void> _deletaProduto(BuildContext context, String documentId) async {
+    late String feedbackMessage;
+    bool produtoExiste = false;
+
+    await produtos.doc(documentId).get().then((value) {
+      if (value.exists && value != null) {
+        produtoExiste = true;
+      }
+    });
+
+    if (produtoExiste) {
+      await produtos.doc(documentId).delete().then((value) {
+        feedbackMessage = "Produto deletado com sucesso!";
+
+        Navigator.of(context).popUntil(
+          ModalRoute.withName("/"),
+        );
+      }).catchError((error) {
+        feedbackMessage = "Erro ao deletar produto!";
+      });
+    } else {
+      feedbackMessage = "Erro! Produto não encontrado.";
+    }
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
