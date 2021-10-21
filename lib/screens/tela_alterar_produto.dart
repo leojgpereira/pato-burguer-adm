@@ -238,8 +238,8 @@ class FormularioAlteracaoProduto extends StatelessWidget {
     _nomeProduto = TextEditingController(text: produto.nome);
     _detalhesProduto = TextEditingController(text: produto.detalhes);
     _ingredientesProduto = TextEditingController(text: produto.ingredientes);
-    _precoProduto =
-        TextEditingController(text: produto.preco.toStringAsFixed(2));
+    _precoProduto = TextEditingController(
+        text: produto.preco.toStringAsFixed(2).replaceAll('.', ','));
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -285,7 +285,9 @@ class FormularioAlteracaoProduto extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () async {
-              await _atualizaProduto(context);
+              if (_formKey.currentState!.validate()) {
+                await _atualizaProduto(context);
+              }
             },
             child: Text(
               "Atualizar",
@@ -314,7 +316,9 @@ class FormularioAlteracaoProduto extends StatelessWidget {
       'nome': _nomeProduto!.text,
       'detalhes': _detalhesProduto!.text,
       'ingredientes': _ingredientesProduto!.text,
-      'preco': double.tryParse(_precoProduto!.text),
+      'preco': double.tryParse(
+        _precoProduto!.text.replaceAll(',', '.'),
+      ),
     }).then((value) {
       feedbackMessage = "Produto atualizado com sucesso!";
     }).catchError((error) {
@@ -381,6 +385,13 @@ class FormInput extends StatelessWidget {
             ),
             minLines: minLines,
             maxLines: maxLines,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Informação obrigatória";
+              }
+
+              return null;
+            },
           ),
         ),
       ],
