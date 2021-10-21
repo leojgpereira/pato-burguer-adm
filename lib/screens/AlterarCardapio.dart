@@ -47,16 +47,9 @@ class AlterarCardapio extends StatelessWidget {
             ),
             child: SingleChildScrollView(
               child: Wrap(
-                alignment: WrapAlignment.start,
-                spacing: 51,
+                alignment: WrapAlignment.spaceBetween,
                 runSpacing: 32,
                 children: [
-                  ItemCardapio(),
-                  ItemCardapio(),
-                  ItemCardapio(),
-                  ItemCardapio(),
-                  ItemCardapio(),
-                  ItemCardapio(),
                   ItemCardapio(),
                   ItemCardapio(),
                   ItemCardapio(),
