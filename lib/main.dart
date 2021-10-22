@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:patoburguer_admin/screens/AlterarCardapio.dart';
+import 'package:patoburguer_admin/screens/Contato.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +14,7 @@ class PatoBurguerAdminApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.orange),
-      home: AlterarCardapio(),
+      home: Contato(),
     );
   }
 }
