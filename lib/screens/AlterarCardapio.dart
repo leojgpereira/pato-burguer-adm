@@ -140,19 +140,25 @@ class ItemCardapio extends StatelessWidget {
         },
         child: Column(
           children: [
-            IconButton(
-              icon: Image.asset(produto.imagem.replaceAll('images', 'imagens')),
-              iconSize: 120,
-              onPressed: () {
-                print(produto.documentId);
-              },
+            SizedBox(
+              height: 25,
+            ),
+            Container(
+              height: 80,
+              child: FittedBox(
+                alignment: AlignmentDirectional.center,
+                fit: BoxFit.cover,
+              child: Image.asset(produto.imagem.replaceAll('images', 'imagens')),
+              ),
+            ),
+            SizedBox(
+              height: 10,
             ),
             Text(
               produto.nome,
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w700,
-                fontSize: 12,
               ),
             ),
             Text(
@@ -160,7 +166,7 @@ class ItemCardapio extends StatelessWidget {
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w700,
-                fontSize: 20,
+                fontSize: 14,
               ),
             )
           ],
