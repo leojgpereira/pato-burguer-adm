@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:patoburguer_admin/models/produto.dart';
 
 class AlterarCardapio extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,12 +17,18 @@ class AlterarCardapio extends StatelessWidget {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded, color: Color(0xFFFFFFFF),),
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            color: Color(0xFFFFFFFF),
+          ),
           onPressed: () {},
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.add, color: Color(0xFFFFFFFF),),
+            icon: Icon(
+              Icons.add,
+              color: Color(0xFFFFFFFF),
+            ),
             onPressed: () {},
           ),
         ],
@@ -46,14 +53,39 @@ class AlterarCardapio extends StatelessWidget {
               ),
             ),
             child: SingleChildScrollView(
-              child: Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                runSpacing: 32,
-                children: [
-                  ItemCardapio(),
-                  ItemCardapio(),
-                  ItemCardapio(),
-                ],
+              padding: EdgeInsets.only(bottom: 32.0),
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('produtos')
+                    .snapshots(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.active) {
+                    List<Widget> produtos = [];
+
+                    print(snapshot.data.docs);
+                    snapshot.data.docs.forEach((doc) {
+                      Produto produto = Produto(
+                        doc.id,
+                        doc.get('imagem'),
+                        doc.get('nome'),
+                        doc.get('detalhes'),
+                        doc.get('ingredientes'),
+                        doc.get('preco'),
+                      );
+
+                      produtos.add(ItemCardapio(produto));
+                    });
+
+                    return Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      runSpacing: 32,
+                      children: produtos,
+                    );
+                  }
+
+                  return Text('Não há produtos cadastrados!');
+                },
               ),
             ),
           ),
@@ -63,7 +95,11 @@ class AlterarCardapio extends StatelessWidget {
   }
 }
 
-class ItemCardapio extends StatelessWidget{
+class ItemCardapio extends StatelessWidget {
+  final Produto produto;
+
+  ItemCardapio(this.produto);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -96,21 +132,23 @@ class ItemCardapio extends StatelessWidget{
       ),
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor:
-          MaterialStateProperty.all(Colors.transparent),
-          shadowColor:
-          MaterialStateProperty.all(Colors.transparent),
+          backgroundColor: MaterialStateProperty.all(Colors.transparent),
+          shadowColor: MaterialStateProperty.all(Colors.transparent),
         ),
-        onPressed: () {},
+        onPressed: () {
+          print(produto.documentId);
+        },
         child: Column(
           children: [
-            //IconButton(
-              //icon: Image.asset("assets/images/guarana.png"),
-              //iconSize: 120,
-              //onPressed: () {},
-            //),
+            IconButton(
+              icon: Image.asset(produto.imagem.replaceAll('images', 'imagens')),
+              iconSize: 120,
+              onPressed: () {
+                print(produto.documentId);
+              },
+            ),
             Text(
-              "Guaraná Lata",
+              produto.nome,
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w700,
@@ -118,7 +156,7 @@ class ItemCardapio extends StatelessWidget{
               ),
             ),
             Text(
-              'RS 0,00',
+              'RS ${produto.preco.toStringAsFixed(2)}',
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w700,
