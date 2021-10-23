@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:patoburguer_admin/models/auth_exception.dart';
+import 'package:patoburguer_admin/services/auth_service.dart';
+import 'package:provider/src/provider.dart';
 
 class TelaInicio extends StatelessWidget {
   const TelaInicio({Key? key}) : super(key: key);
@@ -13,6 +16,18 @@ class TelaInicio extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Cabecalho(),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await _signout(context);
+            },
+            icon: Icon(
+              Icons.exit_to_app_outlined,
+              color: Colors.black,
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Container(
@@ -49,8 +64,7 @@ class TelaInicio extends StatelessWidget {
                   callback: () {
                     Navigator.pushNamed(
                       context,
-                      '/alterar-item',
-                      arguments: 'L71r9ujjiSaQ8o7pzA0Q',
+                      '/produtos',
                     );
                   },
                 ),
@@ -60,7 +74,12 @@ class TelaInicio extends StatelessWidget {
                 Botao(
                   texto: 'Alterar Contato',
                   icone: 'assets/images/icons/alterar_contato.png',
-                  callback: () {},
+                  callback: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/contato',
+                    );
+                  },
                 ),
                 SizedBox(
                   height: 30.0,
@@ -78,6 +97,24 @@ class TelaInicio extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _signout(BuildContext context) async {
+    AuthService auth = context.read<AuthService>();
+
+    try {
+      await auth.signOut();
+    } on AuthException catch (e) {
+      final signOutFeedback = SnackBar(
+        content: Text(
+          e.message,
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 5),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(signOutFeedback);
+    }
   }
 }
 

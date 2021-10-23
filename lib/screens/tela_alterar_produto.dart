@@ -24,7 +24,6 @@ class _TelaAlterarProdutoState extends State<TelaAlterarProduto> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      // resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
           'Cardápio',
@@ -143,7 +142,7 @@ class _TelaAlterarProdutoState extends State<TelaAlterarProduto> {
                       left: 0,
                       right: 0,
                       bottom: (MediaQuery.of(context).size.height * 0.8),
-                      child: Image.asset(data['imagem']),
+                      child: Image.network(data['imagem']),
                     ),
                   ],
                 ),

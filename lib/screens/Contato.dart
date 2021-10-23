@@ -138,7 +138,7 @@ class ContatoDetalhes extends StatelessWidget {
                           right: 10,
                           left: 10,
                         ),
-                        suffixIcon: Image.asset('assets/imagens/edit.png'),
+                        suffixIcon: Image.asset('assets/images/edit.png'),
                         border: OutlineInputBorder(),
                       ),
                       style: TextStyle(
@@ -190,7 +190,7 @@ class ContatoDetalhes extends StatelessWidget {
                     prefixStyle: TextStyle(
                       color: Theme.of(context).primaryColor,
                     ),
-                    suffixIcon: Image.asset('assets/imagens/edit.png'),
+                    suffixIcon: Image.asset('assets/images/edit.png'),
                     contentPadding:
                         EdgeInsets.only(top: 1, bottom: 1, right: 10, left: 10),
                     border: OutlineInputBorder(),
@@ -222,7 +222,7 @@ class ContatoDetalhes extends StatelessWidget {
                     prefixStyle: TextStyle(
                       color: Theme.of(context).primaryColor,
                     ),
-                    suffixIcon: Image.asset('assets/imagens/edit.png'),
+                    suffixIcon: Image.asset('assets/images/edit.png'),
                     contentPadding:
                         EdgeInsets.only(top: 1, bottom: 1, right: 10, left: 10),
                     border: OutlineInputBorder(),
@@ -255,7 +255,7 @@ class ContatoDetalhes extends StatelessWidget {
                     prefixStyle: TextStyle(
                       color: Theme.of(context).primaryColor,
                     ),
-                    suffixIcon: Image.asset('assets/imagens/edit.png'),
+                    suffixIcon: Image.asset('assets/images/edit.png'),
                     contentPadding:
                         EdgeInsets.only(top: 1, bottom: 1, right: 10, left: 10),
                     border: OutlineInputBorder(),
@@ -302,13 +302,13 @@ class ContatoDetalhes extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: Image.asset('assets/imagens/Whats.png'),
+                      child: Image.asset('assets/images/Whats.png'),
                     ),
                     Flexible(
                       child: TextFormField(
                         controller: _campoWhatsapp,
                         decoration: InputDecoration(
-                          suffixIcon: Image.asset('assets/imagens/edit.png'),
+                          suffixIcon: Image.asset('assets/images/edit.png'),
                           contentPadding: EdgeInsets.only(
                               top: 1, bottom: 1, right: 10, left: 10),
                           border: OutlineInputBorder(),
@@ -353,13 +353,13 @@ class ContatoDetalhes extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: Image.asset('assets/imagens/Facebook.png'),
+                      child: Image.asset('assets/images/Facebook.png'),
                     ),
                     Flexible(
                       child: TextFormField(
                         controller: _campoFacebook,
                         decoration: InputDecoration(
-                          suffixIcon: Image.asset('assets/imagens/edit.png'),
+                          suffixIcon: Image.asset('assets/images/edit.png'),
                           contentPadding: EdgeInsets.only(
                               top: 1, bottom: 1, right: 10, left: 10),
                           border: OutlineInputBorder(),
@@ -390,13 +390,13 @@ class ContatoDetalhes extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: Image.asset('assets/imagens/Instagram.png'),
+                      child: Image.asset('assets/images/Instagram.png'),
                     ),
                     Flexible(
                       child: TextFormField(
                         controller: _campoInstagram,
                         decoration: InputDecoration(
-                          suffixIcon: Image.asset('assets/imagens/edit.png'),
+                          suffixIcon: Image.asset('assets/images/edit.png'),
                           contentPadding: EdgeInsets.only(
                               top: 1, bottom: 1, right: 10, left: 10),
                           border: OutlineInputBorder(),
@@ -430,6 +430,7 @@ class ContatoDetalhes extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(313, 54),
+                primary: Theme.of(context).primaryColor,
               ),
               child: Text(
                 'Salvar',

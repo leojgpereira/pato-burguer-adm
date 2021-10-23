@@ -16,13 +16,6 @@ class AlterarCardapio extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_rounded,
-            color: Color(0xFFFFFFFF),
-          ),
-          onPressed: () {},
-        ),
         actions: [
           IconButton(
             icon: Icon(
@@ -52,40 +45,52 @@ class AlterarCardapio extends StatelessWidget {
                 topLeft: Radius.circular(15.0),
               ),
             ),
-            child: SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 32.0),
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('produtos')
-                    .snapshots(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.active) {
-                    List<Widget> produtos = [];
+            child: Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: 32.0),
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('produtos')
+                      .snapshots(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.hasError ||
+                        (snapshot.hasData && snapshot.data!.docs.length == 0)) {
+                      return Text('Erro ao encontrar produtos disponíveis');
+                    }
 
-                    print(snapshot.data.docs);
-                    snapshot.data.docs.forEach((doc) {
-                      Produto produto = Produto(
-                        doc.id,
-                        doc.get('imagem'),
-                        doc.get('nome'),
-                        doc.get('detalhes'),
-                        doc.get('ingredientes'),
-                        doc.get('preco'),
+                    if (snapshot.hasData &&
+                        snapshot.data!.docs.length > 0 &&
+                        snapshot.connectionState == ConnectionState.active) {
+                      List<Widget> produtos = [];
+
+                      print(snapshot.data.docs);
+                      snapshot.data.docs.forEach((doc) {
+                        Produto produto = Produto(
+                          doc.id,
+                          doc.get('imagem'),
+                          doc.get('nome'),
+                          doc.get('detalhes'),
+                          doc.get('ingredientes'),
+                          doc.get('preco'),
+                        );
+
+                        produtos.add(ItemCardapio(produto));
+                      });
+
+                      return Wrap(
+                        alignment: WrapAlignment.spaceBetween,
+                        spacing: 32,
+                        runSpacing: 32,
+                        children: produtos,
                       );
+                    }
 
-                      produtos.add(ItemCardapio(produto));
-                    });
-
-                    return Wrap(
-                      alignment: WrapAlignment.spaceBetween,
-                      runSpacing: 32,
-                      children: produtos,
+                    return CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
                     );
-                  }
-
-                  return Text('Não há produtos cadastrados!');
-                },
+                  },
+                ),
               ),
             ),
           ),
@@ -136,7 +141,11 @@ class ItemCardapio extends StatelessWidget {
           shadowColor: MaterialStateProperty.all(Colors.transparent),
         ),
         onPressed: () {
-          print(produto.documentId);
+          Navigator.pushNamed(
+            context,
+            '/alterar-item',
+            arguments: produto.documentId,
+          );
         },
         child: Column(
           children: [
@@ -148,7 +157,11 @@ class ItemCardapio extends StatelessWidget {
               child: FittedBox(
                 alignment: AlignmentDirectional.center,
                 fit: BoxFit.cover,
-              child: Image.asset(produto.imagem.replaceAll('images', 'imagens')),
+                child: Image.network(
+                  produto.imagem,
+                  height: 80.0,
+                  width: 1000.0,
+                ),
               ),
             ),
             SizedBox(
