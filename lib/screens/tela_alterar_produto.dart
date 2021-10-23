@@ -204,7 +204,7 @@ class _TelaAlterarProdutoState extends State<TelaAlterarProduto> {
         feedbackMessage = "Produto deletado com sucesso!";
 
         Navigator.of(context).popUntil(
-          ModalRoute.withName("/"),
+          ModalRoute.withName("/produtos"),
         );
       }).catchError((error) {
         feedbackMessage = "Erro ao deletar produto!";
