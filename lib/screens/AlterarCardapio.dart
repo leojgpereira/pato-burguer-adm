@@ -174,14 +174,27 @@ class ItemCardapio extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            Text(
-              'RS ${produto.preco.toStringAsFixed(2)}',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
-                fontSize: 14,
-              ),
-            )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'R\$ ',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  '${produto.preco.toStringAsFixed(2).replaceAll('.', ',')}',
+                  style: TextStyle(
+                    color: Color(0xFF434343),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20.0,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
